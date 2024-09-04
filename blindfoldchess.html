@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blindfold Chess Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .container {
+      text-align: center;
+    }
+    #chessBoard {
+      width: 400px;
+      height: 400px;
+      margin: 0 auto;
+      display: none; /* Hidden by default for blindfold mode */
+    }
+    .blindfold-mode {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Blindfold Chess Practice</h1>
+
+    <!-- Mode Selection -->
+    <div>
+      <label for="mode">Select Mode:</label>
+      <select id="mode" onchange="selectMode()">
+        <option value="play-online">Play Online</option>
+        <option value="play-blindfolded">Play Blindfolded</option>
+        <option value="fully-blindfolded">Fully Blindfolded</option>
+      </select>
+    </div>
+
+    <!-- Chess Board (Hidden in Blindfold Modes) -->
+    <div id="chessBoard" class="chessboard"></div>
+
+    <!-- Blindfold Mode (Input Box for Moves) -->
+    <div id="move-input-section" class="blindfold-mode">
+      <h2>Enter your move:</h2>
+      <input type="text" id="moveInput" placeholder="e2 to e4" />
+      <button onclick="submitMove()">Submit Move</button>
+      <p id="move-status"></p>
+    </div>
+
+    <!-- Status Section -->
+    <h2 id="game-status">Waiting for opponent...</h2>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.11.0/chess.min.js"></script>
+  <script>
+    let game = new Chess();
+    let blindfoldMode = false;
+    let fullyBlindfoldedMode = false;
+
+    // Function to handle mode selection
+    function selectMode() {
+      const mode = document.getElementById('mode').value;
+      const chessBoard = document.getElementById('chessBoard');
+      const blindfoldSection = document.getElementById('move-input-section');
+      
+      if (mode === 'play-online') {
+        chessBoard.style.display = 'block';
+        blindfoldSection.style.display = 'none';
+        blindfoldMode = false;
+        fullyBlindfoldedMode = false;
+      } else if (mode === 'play-blindfolded') {
+        chessBoard.style.display = 'none';
+        blindfoldSection.style.display = 'block';
+        blindfoldMode = true;
+        fullyBlindfoldedMode = false;
+      } else if (mode === 'fully-blindfolded') {
+        chessBoard.style.display = 'none';
+        blindfoldSection.style.display = 'block';
+        blindfoldMode = false;
+        fullyBlindfoldedMode = true;
+      }
+    }
+
+    // Function to handle move submission
+    function submitMove() {
+      const moveInput = document.getElementById('moveInput').value;
+      const move = game.move(moveInput, { sloppy: true });
+
+      if (move) {
+        document.getElementById('move-status').innerText = `Move made: ${moveInput}`;
+        document.getElementById('moveInput').value = '';
+        if (game.game_over()) {
+          document.getElementById('game-status').innerText = 'Game over!';
+        }
+      } else {
+        document.getElementById('move-status').innerText = 'Invalid move, try again.';
+      }
+    }
+
+    // Optional: WebSockets for Online Multiplayer (Placeholder)
+    // Connect to WebSocket server to play with another player online
+    /*
+    let socket = new WebSocket("ws://your-server-url");
+    socket.onmessage = function(event) {
+      let data = JSON.parse(event.data);
+      if (data.type === 'move') {
+        game.move(data.move);
+        updateBoard();
+      }
+    };
+    */
+  </script>
+</body>
+</html>
