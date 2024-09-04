@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Protected Folder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Access the Protected Folder</h1>
+        <form id="passwordForm">
+            <label for="password">Enter Password:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="error-message" class="hidden">Incorrect password. Please try again.</div>
+        <div id="folderLink" class="hidden">
+            <h2>Download Folder</h2>
+            <a href="your-folder.zip" download>Click here to download the folder</a>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
